@@ -70,9 +70,7 @@ var router = function (pool) {
     })
     accountRouter.route('/displaytext').get(function(req,res,next){
         pool.getConnection(function(err,connection){
-            console.log(req.body);
             var query="select * from user";
-            console.log('queryt'+query);
             connection.query(query,function(err,rows){
                 if(err){
                     console.log(err);
@@ -88,15 +86,28 @@ var router = function (pool) {
 
 
     })
-    accountRouter.route('/updatetext').put(function(req,res,next){
+    accountRouter.route('/updatetext/:userId').put(function(req,res,next){
         pool.getConnection(function(err,connection){
             console.log(req.body);
-            if (req.query['Id']) {
-                var query = "UPDATE  user SET  EmailId ='" + req.body['EmailId']
-                    + "' ,FirstName ='" + req.body['FirstName']
-                    + "' ,LastName ='" + req.body['LastName'] + "' ,Designation ='" + req.body['Designation']
-                    + "' ,IsActive = '" + req.body['IsActive']
-                    + "' where AddressBookId = '" + req.query['Id'] + "'";
+            console.log(req.params.userId);
+            if (req.params.userId) {
+                var query="UPDATE user SET userName='"+req.body['Username']+"' where userId= '"+req.params.userId+"'";
+                console.log('queryt'+query);
+                connection.query(query,function(err,rows){
+                    if(err){
+                        console.log(err);
+                        res.status(500).send('500 Error :' + err);
+                    }
+                    else
+                    {
+                        console.log(rows);
+                        res.status(200).json(rows);
+                    }
+                })
+            }
+            else
+            {
+                console.log("erro in userid");
             }
         })
     })

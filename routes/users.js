@@ -49,7 +49,9 @@ var router = function (pool) {
     accountRouter.route('/Inserttext').post(function(req,res,next){
         pool.getConnection(function(err,connection){
             console.log(req.body);
-            var query="insert into user(userName) values"+"('" +req.body['userName'] +"')";
+            var userObject= req.body;
+            console.log(userObject);
+            var query="insert into user(userName) values"+"('" +req.body['Username'] +"')";
             console.log('queryt'+query);
             connection.query(query,function(err,rows){
                 if(err){
@@ -85,6 +87,18 @@ var router = function (pool) {
         })
 
 
+    })
+    accountRouter.route('/updatetext').put(function(req,res,next){
+        pool.getConnection(function(err,connection){
+            console.log(req.body);
+            if (req.query['Id']) {
+                var query = "UPDATE  user SET  EmailId ='" + req.body['EmailId']
+                    + "' ,FirstName ='" + req.body['FirstName']
+                    + "' ,LastName ='" + req.body['LastName'] + "' ,Designation ='" + req.body['Designation']
+                    + "' ,IsActive = '" + req.body['IsActive']
+                    + "' where AddressBookId = '" + req.query['Id'] + "'";
+            }
+        })
     })
 
 /*    accountRouter.route('/Insert').post(function(req,res,next){

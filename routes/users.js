@@ -66,7 +66,7 @@ var router = function (pool) {
 
 
     })
-    accountRouter.route('/Inserttext').get(function(req,res,next){
+    accountRouter.route('/displaytext').get(function(req,res,next){
         pool.getConnection(function(err,connection){
             console.log(req.body);
             var query="select * from user";

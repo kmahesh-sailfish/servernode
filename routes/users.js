@@ -28,17 +28,17 @@ var router = function (pool) {
     });
     accountRouter.route('/Insert').post(function(req,res,next){
         pool.getConnection(function(err,connection){
-            console.log(req.body);
+
             var query="insert into usertypes(userName,password,email) values"+"('" +req.body['userName'] + "','"+ req.body['password'] + "','" +req.body['email'] +"')";
-            console.log('queryt'+query);
+
             connection.query(query,function(err,rows){
                 if(err){
-                    console.log(err);
+
                     res.status(500).send('500 Error :' + err);
                 }
                 else
                 {
-                    console.log(rows);
+
                     res.status(200).json(rows);
                 }
             })
@@ -48,19 +48,18 @@ var router = function (pool) {
     })
     accountRouter.route('/Inserttext').post(function(req,res,next){
         pool.getConnection(function(err,connection){
-            console.log(req.body);
-            var userObject= req.body;
-            console.log(userObject);
+
+
             var query="insert into user(userName) values"+"('" +req.body['Username'] +"')";
-            console.log('queryt'+query);
+
             connection.query(query,function(err,rows){
                 if(err){
-                    console.log(err);
+
                     res.status(500).send('500 Error :' + err);
                 }
                 else
                 {
-                    console.log(rows);
+
                     res.status(200).json(rows);
                 }
             })
@@ -69,17 +68,43 @@ var router = function (pool) {
 
 
     })
+    accountRouter.route('/getdetails').get(function(req,res,next){
+
+            if(req.query.userId){
+                var query="select * from user where userId= '"+req.query.userId+"'";
+            }
+        if(query){
+            pool.getConnection(function(err,connection){
+                connection.query(query,function(err,rows){
+                    if(err){
+
+                        res.status(500).send('500 Error :' + err);
+                    }
+                    else
+                    {
+
+                        res.status(200).json(rows);
+                    }
+                })
+            })
+        }
+        else
+        {
+            console.log("error in the query");
+        }
+
+    })
     accountRouter.route('/displaytext').get(function(req,res,next){
         pool.getConnection(function(err,connection){
             var query="select * from user";
             connection.query(query,function(err,rows){
                 if(err){
-                    console.log(err);
+
                     res.status(500).send('500 Error :' + err);
                 }
                 else
                 {
-                    console.log(rows);
+
                     res.status(200).json(rows);
                 }
             })
@@ -89,19 +114,18 @@ var router = function (pool) {
     })
     accountRouter.route('/updatetext/:userId').put(function(req,res,next){
         pool.getConnection(function(err,connection){
-            console.log(req.body);
-            console.log(req.params.userId);
+
             if (req.params.userId) {
                 var query="UPDATE user SET userName='"+req.body['Username']+"' where userId= '"+req.params.userId+"'";
-                console.log('queryt'+query);
+
                 connection.query(query,function(err,rows){
                     if(err){
-                        console.log(err);
+
                         res.status(500).send('500 Error :' + err);
                     }
                     else
                     {
-                        console.log(rows);
+
                         res.status(200).json(rows);
                     }
                 })
@@ -113,26 +137,7 @@ var router = function (pool) {
         })
     })
 
-/*    accountRouter.route('/Insert').post(function(req,res,next){
-        pool.getConnection(function(err,connection){
-            console.log(req.body);
-            var query="insert into usertypes(usertypeID,userName,password,email) values"+"('"+req.body['usertypeID']+"','" +req.body['userName'] + "','"+ req.body['password'] + "','" +req.body['email'] +"')";
-            console.log('queryt'+query);
-            connection.query(query,function(err,rows){
-                if(err){
-                    console.log(err);
-                    res.status(500).send('500 Error :' + err);
-                }
-                else
-                {
-                    console.log(rows);
-                    res.status(200).json(rows);
-                }
-            })
-        })
 
-
-    })*/
 
     return accountRouter;
 }
